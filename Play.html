@@ -1,0 +1,96 @@
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jogo</title>
+    <style>
+        body {
+            background-color: lightblue;
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+        .game-container {
+            position: relative;
+            background-color: #3498db;
+            width: 400px;
+            height: 400px;
+            margin: 20px auto;
+            border: 2px solid rgb(44, 71, 228);
+            border-radius: 30px;
+            box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        .target {
+            width: 50px;
+            height: 50px;
+            background-color: red;
+            position: absolute;
+            cursor: pointer;
+            border-radius: 25px;
+        }
+    </style>
+</head>
+<body>
+    <script>
+        let playerName = prompt("Digite seu nome para iniciar o jogo:");
+        if (!playerName) {
+            alert("Nome inválido. Redirecionando para o menu...");
+            window.location.href = "menu.html";
+        }
+    </script>
+    <p>Jogador: <span id="player-name"></span></p>
+    <p>Pontos: <span id="score">0</span></p>
+    <div class="game-container">
+        <div class="target" id="target"></div>
+    </div>
+    <p>Tempo restante: <span id="timer">30</span> segundos</p>
+    
+    <script>
+        document.getElementById("player-name").textContent = playerName;
+        let score = 0;
+        let timeLeft = 30;
+        const target = document.getElementById("target");
+        const scoreDisplay = document.getElementById("score");
+        const timerDisplay = document.getElementById("timer");
+        const gameContainer = document.querySelector(".game-container");
+        
+        function moveTarget() {
+            let maxX = gameContainer.clientWidth - target.clientWidth;
+            let maxY = gameContainer.clientHeight - target.clientHeight;
+            let randomX = Math.floor(Math.random() * maxX);
+            let randomY = Math.floor(Math.random() * maxY);
+            target.style.left = randomX + "px";
+            target.style.top = randomY + "px";
+        }
+        
+        target.addEventListener("click", function() {
+            if (timeLeft > 0) {
+                score++;
+                scoreDisplay.textContent = score;
+                moveTarget();
+            }
+        });
+        
+        function startTimer() {
+            let timer = setInterval(function() {
+                if (timeLeft > 0) {
+                    timeLeft--;
+                    timerDisplay.textContent = timeLeft;
+                } else {
+                    clearInterval(timer);
+                    alert(playerName + ", o tempo esgotou! Sua pontuação final foi: " + score);
+                    
+                    // Salvar pontuação no localStorage
+                    let rankings = JSON.parse(localStorage.getItem("rankings")) || [];
+                    rankings.push({ name: playerName, score: score });
+                    localStorage.setItem("rankings", JSON.stringify(rankings));
+                    
+                    window.location.href = "menu.html";
+                }
+            }, 1000);
+        }
+        
+        moveTarget();
+        startTimer();
+    </script>
+</body>
+</html>
