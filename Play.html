@@ -34,7 +34,7 @@
         let playerName = prompt("Digite seu nome para iniciar o jogo:");
         if (!playerName) {
             alert("Nome inválido. Redirecionando para o menu...");
-            window.location.href = "menu.html";
+            window.location.href = "Index.html";
         }
     </script>
     <p>Jogador: <span id="player-name"></span></p>
@@ -84,7 +84,7 @@
                     rankings.push({ name: playerName, score: score });
                     localStorage.setItem("rankings", JSON.stringify(rankings));
                     
-                    window.location.href = "menu.html";
+                    window.location.href = "Index.html";
                 }
             }, 1000);
         }
